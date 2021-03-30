@@ -25,6 +25,7 @@ const App = () => {
     setAbout,
     yoquese,
     activo,
+    removeAll,
   } = useGlobalContext();
   function normalToUTC(date, hour) {
     let array = [];
@@ -46,12 +47,13 @@ const App = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!entry.task || !entry.date) {
+    if (!entry.task) {
       if (!entry.task) {
         showAlert(true, "Please enter a value", "danger");
-      } else if (!entry.date) {
-        showAlert(true, "Please enter a date", "danger");
       }
+      // else if (!entry.date) {
+      //   showAlert(true, "Please enter a date", "danger");
+      // }
     } else if (
       normalToUTC(
         entry.date,
@@ -61,7 +63,7 @@ const App = () => {
       showAlert(true, "Please enter a valid date", "danger");
     } else if (entry && isEditing) {
       yoquese();
-      list.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
+      // list.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
       showAlert(true, "Item changed", "success");
     } else {
       const newItem = {
@@ -72,12 +74,11 @@ const App = () => {
         about: entry.details.about,
       };
       setLista(newItem);
-      list.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
+      // list.sort((a, b) => (a.date > b.date ? 1 : b.date > a.date ? -1 : 0));
       cleanUp();
       showAlert(
         true,
         `Task succesfully added!
-      ${entry.task} on ${entry.date} 
       `,
         "success"
       );
@@ -87,7 +88,7 @@ const App = () => {
   return (
     <>
       <header className="header">
-        <h1>Personal Agenda</h1>
+        <h1>To do list</h1>
       </header>
       <section className="section-center">
         {alert.show && <Alert />}
@@ -100,30 +101,31 @@ const App = () => {
               placeholder="e.g Company meeting"
               value={entry.task}
               onChange={(e) => setTask(e.target.value)}></input>
-            <input
+            {/* <input
               id="entryDate"
               name="entryDate"
               type="date"
               value={entry.date}
-              onChange={(e) => setDate(e.target.value)}></input>
+              onChange={(e) => setDate(e.target.value)}></input> */}
           </div>
 
           <div className="box-container">
-            {entry.task && (
+            {/* {entry.task && (
               <input
                 id="entryTime"
                 name="entryTime"
                 type="time"
                 value={entry.details.time}
                 onChange={(e) => setTime(e.target.value)}></input>
-            )}
+            )} */}
             {entry.task && (
               <textarea
                 id="about"
                 name="entryAbout"
                 type="text"
                 value={entry.details.about}
-                onChange={(e) => setAbout(e.target.value)}></textarea>
+                onChange={(e) => setAbout(e.target.value)}
+                placeholder="put here some info about the task"></textarea>
             )}
           </div>
 
@@ -131,10 +133,21 @@ const App = () => {
             {isEditing ? "Save changes" : "Add item"}
           </button>
         </form>
-        <div className="list-container">
-          {list.map((item) => {
-            return <List key={item.id} {...item} />;
-          })}
+        <div className="listButton">
+          <div className="list-container">
+            {list.map((item) => {
+              return <List key={item.id} {...item} />;
+            })}
+          </div>
+          {list.length > 0 && (
+            <button
+              className="btn remove-btn"
+              onClick={() => {
+                removeAll();
+              }}>
+              remove all
+            </button>
+          )}
         </div>
       </section>
     </>

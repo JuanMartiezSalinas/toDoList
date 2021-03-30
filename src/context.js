@@ -72,6 +72,10 @@ export const AppProvider = ({ children }) => {
     showAlert(true, "Item removed", "danger");
     setList(list.filter((item) => item.id !== id));
   };
+  const removeAll = () => {
+    setList([]);
+    showAlert(true, "All items Removed", "danger");
+  };
   const yoquese = () => {
     setList(
       list.map((item) => {
@@ -115,6 +119,7 @@ export const AppProvider = ({ children }) => {
         editItem,
         yoquese,
         removeItem,
+        removeAll,
         activo,
       }}>
       {children}
